@@ -1,0 +1,66 @@
+<div class="container">
+  <h3>Employee Details: {{empData.length}}</h3>
+  <hr>
+
+  <div class="main-container">
+    <div class="row centerText">
+
+      <div class="col-md-3 form-group">
+        <label for="department">Department : </label>
+        <select class="selectPosition" name="department" (change)="selectDept()">
+          <option value="all">All</option>
+          <option value="computer">Computer</option>
+          <option value="physics">Physics</option>
+          <option value="chemistry">Chemistry</option>
+        </select>
+      </div>
+
+      <div class="col-md-6 form-group">
+        <form class="form-inline formMargin"> 
+          <label for="nameandemail"></label>
+          <input type="text" name="nameandemail" placeholder="Name/Email" [(ngModel)]="query">
+          <div class="btnPlace"><button type="button" class="searchbtn">Search</button>
+            <button type="button" class="resetbtn">Reset and Reload Data</button>
+          </div>
+        </form>
+      </div>
+
+      <div class=" col-md-3 form-group">
+        <label for="sortby">Sort : </label>
+        <select class="selectPosition" name="sortby" (change)="sortBy()">
+          <option value="" disabled selected hidden>Sort By..</option>
+          <option value="name">Name (a-z)</option>
+          <option value="name">Name (z-a)</option>
+          <option value="age">Age</option>
+          <option value="email">Email</option>
+        </select>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="table-content">
+      <table class="table table-bordered table-condensed table-striped">
+        <thead>
+          <tr>
+            <th>Emp Name</th>
+            <th>Age</th>
+            <th>Email Address</th>
+            <th>Departments</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="showEmpData" *ngFor="let employee of empData| search: query; let i = index">
+            <td>{{employee.name}}</td>
+            <td>{{employee.age}}</td>
+            <td>{{employee.email}}</td>
+            <td><a data-toggle="tooltip" title="{{employee.departments}}">{{employee.departments.length}}</a></td>
+          </tr>
+          <ng-template>
+            <tr>NO RECORDS FOUND</tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

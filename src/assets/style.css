@@ -1,0 +1,41 @@
+.container {
+  margin: 20px;
+}
+
+hr {
+  margin-top: 0px !important;
+}
+
+.formMargin {
+  margin-top: 8px;
+}
+
+.centerText {
+  margin-left: 55px !important;
+}
+
+.btnPlace button {
+  margin: 0px 20px;
+}
+
+label {
+  font-weight: bold;
+}
+
+.selectPosition {
+  margin: 10px 0px 0px 10px !important;
+}
+
+.table-content {
+  border: 1px solid black !important;
+}
+
+table {
+  margin: 0px !important;
+}
+
+table,
+th,
+td {
+  text-align: center;
+}
