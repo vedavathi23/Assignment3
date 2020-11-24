@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>Employee Details: {{empData.length}}</h3>
+  <h3>Employee Details: {{employees.length}}</h3>
   <hr>
 
   <div class="main-container">
@@ -7,20 +7,22 @@
 
       <div class="col-md-3 form-group">
         <label for="department">Department : </label>
-        <select class="selectPosition" name="department" (change)="selectDept()">
-          <option value="all">All</option>
-          <option value="computer">Computer</option>
-          <option value="physics">Physics</option>
-          <option value="chemistry">Chemistry</option>
+        <select class="selectPosition" id="searchDept" name="department" (change)="selectDept()">
+          <!-- <option value="">{{this.filteredDepts}}</option> -->
+          <option value="All">All</option>
+          <option value="Computer">Computer</option>
+          <option value="Physics">Physics</option>
+          <option value="Chemistry">Chemistry</option>
         </select>
       </div>
 
       <div class="col-md-6 form-group">
-        <form class="form-inline formMargin"> 
+        <form class="form-inline formMargin" id="searchForm">
           <label for="nameandemail"></label>
-          <input type="text" name="nameandemail" placeholder="Name/Email" [(ngModel)]="query">
+          <input type="text" name="nameandemail" placeholder="Name/Email" [(ngModel)]="searchText"
+            (input)="filterEmployees()">
           <div class="btnPlace"><button type="button" class="searchbtn">Search</button>
-            <button type="button" class="resetbtn">Reset and Reload Data</button>
+            <button type="button" class="resetbtn" (click)="resetInputSearch()">Reset and Reload Data</button>
           </div>
         </form>
       </div>
@@ -37,6 +39,12 @@
       </div>
     </div>
 
+    <div class="row">
+      <div class="col-md-12">
+        Filter By : {{searchText | nullOrEmpty :'N/A'}}
+      </div>
+    </div>
+
     <hr>
 
     <div class="table-content">
@@ -50,14 +58,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr id="showEmpData" *ngFor="let employee of empData| search: query; let i = index">
+
+          <tr *ngIf="employees && employees.length; else noEmpData" (mousemove)="mouseEnterEvent()"></tr>
+          <tr *ngFor="let employee of employees; let i = index">
             <td>{{employee.name}}</td>
             <td>{{employee.age}}</td>
             <td>{{employee.email}}</td>
             <td><a data-toggle="tooltip" title="{{employee.departments}}">{{employee.departments.length}}</a></td>
           </tr>
-          <ng-template>
-            <tr>NO RECORDS FOUND</tr>
+          <ng-template #noEmpData>
+            <div class="errorMsg"> NO RECORDS FOUND</div>
           </ng-template>
         </tbody>
       </table>

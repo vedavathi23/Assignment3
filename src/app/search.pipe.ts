@@ -1,23 +1,20 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from "@angular/core";
+import { Employee } from './employee-interface';
 
 @Pipe({
-  name: 'search'
+  name: "search",
+  pure: false,
 })
+
 export class SearchPipe implements PipeTransform {
 
-  transform(value: any, args?: any): any {
-
-    if (!value) {
-      return null;
+  transform(empInfo: Employee[], searchText: string): any {
+    if (searchText) {
+      return empInfo.filter((x) =>
+        x.name.toLowerCase().includes(searchText.toLowerCase())
+      );
+    } else {
+      return empInfo;
     }
-    if (!args) {
-      return value;
-    }
-    args = args.toLowerCase();
-
-    return value.filter(function (item) {
-      return JSON.stringify(item).toLowerCase().includes(args);
-    });
   }
-
 }

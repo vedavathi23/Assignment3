@@ -39,3 +39,9 @@ th,
 td {
   text-align: center;
 }
+
+.errorMsg{
+  margin: 10px;
+  color: red;
+  font-weight: bold;
+}

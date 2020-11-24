@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Employee } from './employee-interface';
+import { IfNullOrEmpty } from './nullorempty.pipe';
 
 @Component({
   selector: 'app-root',
@@ -8,61 +10,127 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'assessment3';
-  data: string[];
-  empData: any;
-  employee: any;
-  department: any;
   sortByAsc = true;
-  query = '';
-  showEmpData: boolean = false;
-  public employeeDetails: object = [];
+  searchText: string = "";
+  sortedDepts = [];
+  sortedList: string;
+  filteredEmployees: any[];
 
 
-  constructor(private httpclient: HttpClient) { }
+  constructor(
+    private httpclient: HttpClient,
+    private isNullOrEmpty: IfNullOrEmpty) { }
+
+
+  employees: Employee[] = [
+    {
+      name: "Employee One",
+      age: 40,
+      email: "one@gmail.com",
+      departments: ["Computer", "Physics"]
+    },
+    {
+      name: "Employee Two",
+      age: 10,
+      email: "Two@gmail.com",
+      departments: ["Computer"]
+    },
+    {
+      name: "Employee Three",
+      age: 10,
+      email: "Three@gmail.com",
+      departments: ["Physics", "Chemistry"]
+    },
+    {
+      name: "Employee Four",
+      age: 60,
+      email: "Four@gmail.com",
+      departments: ["Chemistry", "Physics"]
+    },
+    {
+      name: "Employee Five",
+      age: 70,
+      email: "Five@gmail.com",
+      departments: ["Computer", "Physics", "Chemistry"]
+    },
+    {
+      name: "Employee Six",
+      age: 70,
+      email: "Six@gmail.com",
+      departments: ["Computer", "Physics"]
+    },
+  ];
+
+  empInfo: Employee[] = [...this.employees];
 
 
   sortBy() {
     if (this.sortByAsc === true) {
       this.sortByAsc = false;
-      this.empData.sort((a, b) => a.name.localeCompare(b.name));
+      this.employees.sort((a, b) => a.name.localeCompare(b.name));
 
     } else {
       this.sortByAsc = true;
-      this.empData.sort((a, b) => b.name.localeCompare(a.name));
+      this.employees.sort((a, b) => b.name.localeCompare(a.name));
     }
   }
+
+  // Selecting departments 
 
   selectDept() {
-    const deptArray = new Array;
-
-    for (let i = 0; i < this.data.length; i++) {
-      deptArray.push(this.data.forEach(value => {
-        console.log("--------------------", value)
-      }))
-      const unique = (value, index, self) => {
-        return self.indexOf(value) === index;
-      };
-      console.log(deptArray.filter(unique));
+    const filteredDepts = new Array;
+    var inputValue = (<HTMLInputElement>document.getElementById("searchDept")).value;
+    if (inputValue == "All" || inputValue == "") {
+      this.employees = this.empInfo;
+      return this.employees
     }
+    else {
+      for (let i of this.empInfo) {
+        for (let j of i["departments"]) {
+          if (j == inputValue) {
+            filteredDepts.push(i)
+          }
+          else {
+            this.employees = this.empInfo
+          }
+        }
+      }
+    }
+    this.employees = filteredDepts;
   }
 
+  // Reset Search Input
 
-  SearchProduct(name: string) {
-    const obj = this.data.filter(function (employee) {
-      this.employeeDetails = obj;
-      return this.employeeDetails;
-    })
+  resetInputSearch() {
+    this.searchText = "";
+    this.employees = this.empInfo;
+  }
+
+  // Filters employee details based on input
+
+  mouseEnterEvent() { }
+
+  filterEmployees() {
+    if (this.searchText) {
+      this.employees = this.empInfo.filter((x) =>
+        x.name.toLowerCase().includes(this.searchText.toLowerCase())
+      );
+    } else {
+      this.employees = this.empInfo;
+    }
   }
 
   ngOnInit() {
-    this.httpclient.get('./assets/employeesdata.json').subscribe(
-      data => {
-        this.empData = data
-        this.empData.map(employee => {
-          this.department = employee.departments;
-          console.log("DATA", this.department)
-        })
-      },
-    )
+    const deptArray = []
+    for (let i of this.employees) {
+      for (let j of i["departments"]) {
+        deptArray.push(j)
+      }
+    }
+    const unique = (value, index, self) => {
+      return self.indexOf(value) === index;
+    };
+    console.log(deptArray.filter(unique));
+    this.sortedDepts = deptArray.filter(unique)
   }
 }
